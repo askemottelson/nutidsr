@@ -1,5 +1,5 @@
 # nutidsr
-A small grammar library for the Danish language
+A small grammar library for the Danish language written in Python3
 
 # purpose
 Autmatically identify nutids-r errors, e.g., "han styre_ landet".
