@@ -38,7 +38,7 @@ def url(letter, iteration, include_max=True):
         "&p=",
         str(iteration*100),
     ]
-    
+
     if include_max:
         components.append("&resultsperpage=100")
 
@@ -86,12 +86,12 @@ def do_scrape(base_url):
                         continue
 
                     sibling_word = category.parent.next_sibling
-                    sibling_word = sibling_word.split(";")[0].replace(',','').strip()
+                    sibling_word = sibling_word.split(";")[0].replace(',', '').strip()
                     if '-' in sibling_word:
                         continue
 
                     w.word = sibling_word
-                except Exception as e:
+                except Exception:
                     w.word = ''
 
                 if len(w.word) == 0:
@@ -156,7 +156,7 @@ if __name__ == "__main__":
     for letter in letters:
         try:
             num_words = init_letter(letter)
-        except:
+        except Exception:
             # no more words
             continue
 
@@ -165,6 +165,6 @@ if __name__ == "__main__":
             print("ITERATION", i)
             do_scrape(url(letter, i))
 
-#do_scrape("https://dsn.dk/?retskriv=g%C3%B8re&ae=0")
-# do_scrape(url('g', 0))
-#do_scrape("https://dsn.dk/?retskriv=ampere&ae=0")
+    # do_scrape("https://dsn.dk/?retskriv=g%C3%B8re&ae=0")
+    # do_scrape(url('g', 0))
+    # do_scrape("https://dsn.dk/?retskriv=ampere&ae=0")

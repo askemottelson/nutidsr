@@ -2,10 +2,11 @@ from db.db_handler import db
 from db.models import Word, Form
 import re
 
+
 class Sentence():
 
     def __init__(self, sentence):
-        if not type(sentence) is list:
+        if not isinstance(sentence, list):
             raise Exception("Sentence() takes a list as argument")
 
         self.sentence = sentence
@@ -29,7 +30,6 @@ class Sentence():
             if w is None:
                 self.words[i] = self.pick_a_word(i)
 
-
     def pick_first(self, candidates, category, revert=False):
         for cand in candidates:
             if revert:
@@ -40,11 +40,10 @@ class Sentence():
                     return cand
         raise Exception("no category in candidate list")
 
-
     def pick_a_word(self, index):
         candidates = self.candidates[index]
 
-        # if it's now a word, we don't know
+        # if it's not a real word, we don't know
         if len(candidates) == 0:
             return None
 
@@ -54,7 +53,7 @@ class Sentence():
 
         # now to the tricky part
         try:
-            pre = self.get_obj(index-1)
+            pre = self.get_obj(index - 1)
 
             if pre.category == 'konj.':
                 return self.pick_first(candidates, 'vb.')
@@ -77,7 +76,7 @@ class Sentence():
             # desperate times
             self.pick_first(candidates, 'pron.')
 
-        except Exception as e:
+        except Exception:
             # didn't have what we were looking for
             pass
 
@@ -85,6 +84,7 @@ class Sentence():
         return candidates[0]
 
     def get_words(self, word):
+        # clean stuff away
         word = word.translate('"»«“”‘’\'')
 
         if len(word) == 0:
@@ -153,7 +153,8 @@ class Sentences():
             if len(words) > 0:
                 # glue together here
                 if len(sentences) > count:
-                    approved_sentences.append(sentences[count] + '. ' + sentences[count+1])
+                    approved_sentences.append(
+                        sentences[count] + '. ' + sentences[count + 1])
                     skip_next = True
                 else:
                     approved_sentences.append(sentences[count] + '.')
@@ -172,33 +173,32 @@ class Sentences():
 if __name__ == "__main__":
     # just some tests
 
-    o = Sentence(["fuglen","kan","lide","at","pikkerd"]).get_obj(4)
+    o = Sentence(["fuglen", "kan", "lide", "at", "pikkerd"]).get_obj(4)
     assert o is None
 
-    o = Sentence(["det","er","min","pik"]).get_obj(3)
+    o = Sentence(["det", "er", "min", "pik"]).get_obj(3)
     assert o.category == 'sb.'
 
-    o = Sentence(["det","er","mine","pikke"]).get_obj(3)
+    o = Sentence(["det", "er", "mine", "pikke"]).get_obj(3)
     assert o.category == 'sb.'
 
-    o = Sentence(["fuglen","pikker"]).get_obj(1)
+    o = Sentence(["fuglen", "pikker"]).get_obj(1)
     assert o.category == 'vb.'
 
-    o = Sentence(["fuglen","kan","lide","at","pikke"]).get_obj(4)
+    o = Sentence(["fuglen", "kan", "lide", "at", "pikke"]).get_obj(4)
     assert o.category == 'vb.'
 
-    o = Sentence(["fuglen","og","dens","ben","og","næb"]).get_obj(3)
+    o = Sentence(["fuglen", "og", "dens", "ben", "og", "næb"]).get_obj(3)
     assert o.category == 'sb.'
 
-    o = Sentence(["fuglen","svinger","med","pikken"]).get_obj(3)
+    o = Sentence(["fuglen", "svinger", "med", "pikken"]).get_obj(3)
     assert o.category == 'sb.'
 
-    o = Sentence(["fuglen","svinger","med","pikkens","pik"]).get_obj(3)
+    o = Sentence(["fuglen", "svinger", "med", "pikkens", "pik"]).get_obj(3)
     assert o.category == 'sb.'
 
-    o = Sentence(["Fuglen","svinger","med","pikkens","pik"]).get_obj(3)
+    o = Sentence(["Fuglen", "svinger", "med", "pikkens", "pik"]).get_obj(3)
     assert o.category == 'sb.'
-
 
     text = """
     På det seneste har man i medierne kunnet læse om biologistuderende, der har følt sig krænkede over, at deres underviser kategoriserede data efter køn i forbindelse med nogle statistiske eksempler. Tidligere er det også beskrevet, hvordan en mørklødet forsker på CBS havde følt sig krænket over, at man havde sunget en sang fra Højskolesangbogen med strofen: »Den danske sang er en ung blond pige«.
@@ -215,11 +215,8 @@ if __name__ == "__main__":
     Når man i videnskaben benytter sig af kategoriseringer f.eks. med hensyn til arter eller køn, er det ikke for at fornærme nogen eller for at negligere, at der også kan eksistere noget, der ikke passer ind i disse båse, men for at skabe en forenkling og et overblik over en ofte rodet og uoverskuelig verden.
     """
 
-    s = Sentences(text) 
+    s = Sentences(text)
 
     for sentence in s.sentences:
         print(sentence.sentence)
         assert sentence.get_obj(0) is not None
-
-
-

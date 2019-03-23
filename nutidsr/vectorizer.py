@@ -5,6 +5,7 @@ from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 import difflib
 
+
 class NutidsrVectorizer():
 
     vectorizer = None
@@ -51,10 +52,10 @@ class NutidsrVectorizer():
 
 
 if __name__ == "__main__":
-    from nutidsr.data import annotated 
+    from nutidsr.data import annotated
     vec = NutidsrVectorizer()
     X = vec.make_all_vector([s[0] for s in annotated])
-    cs = [int(s[1]) for s in annotated]    
+    cs = [int(s[1]) for s in annotated]
 
     pca = PCA(n_components=2)
     X_r = pca.fit(X).transform(X)
@@ -62,7 +63,7 @@ if __name__ == "__main__":
     xs = [x[0] for x in X_r]
     ys = [x[1] for x in X_r]
 
-    colors = np.array(['red','blue','green','yellow','orange'])
+    colors = np.array(['red', 'blue', 'green', 'yellow', 'orange'])
 
     plt.scatter(xs, ys, color=colors[cs], alpha=.25)
     plt.show()

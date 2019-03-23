@@ -1,20 +1,11 @@
-import pickle
-from sklearn import svm
+from nutidsr.data import annotated
 from sklearn.model_selection import GridSearchCV
 from sklearn.externals import joblib
-import datetime
-import random
 from sklearn.metrics import f1_score
-from sklearn.feature_selection import SelectKBest, f_classif
 from sklearn.pipeline import Pipeline
-from sklearn.svm import LinearSVC, SVC
-import math
+from sklearn.svm import SVC
 import numpy as np
-from sklearn.feature_selection import VarianceThreshold
-from sklearn.multiclass import OneVsRestClassifier
 from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
-from sklearn.feature_selection import f_classif
 from nutidsr.vectorizer import NutidsrVectorizer
 from nutidsr.data import Tid
 
@@ -27,8 +18,8 @@ def make_clf():
         estimator=Pipeline(
             [
                 ("normalize", StandardScaler()),
-                #("reduce_dim", VarianceThreshold()),
-                #("pca", PCA()),
+                # ("reduce_dim", VarianceThreshold()),
+                # ("pca", PCA()),
                 ("clf", SVC())
             ]
         ),
@@ -36,19 +27,19 @@ def make_clf():
             "clf__C": [.01, .05, .1, .5, 1],
             "clf__probability": [True],
             "clf__kernel": ["linear"],
-            #"reduce_dim__threshold": [0],
-            #"pca__n_components": [2]
+            # "reduce_dim__threshold": [0],
+            # "pca__n_components": [2]
         },
         scoring="accuracy"
     )
     return clf
 
+
 make_clf()
 
 
 print("load data ...")
-from nutidsr.data import annotated
-#np.random.shuffle(annotated)
+# np.random.shuffle(annotated)
 
 train_Xs = []
 train_ys = []
@@ -60,9 +51,9 @@ vectorizer = NutidsrVectorizer()
 
 vectors = vectorizer.make_all_vector(s[0] for s in annotated)
 
-for i,sentence in enumerate(annotated):
+for i, sentence in enumerate(annotated):
     # 20/80
-    if i < len(annotated)/5:
+    if i < len(annotated) / 5:
         # only test 'nutid'
         if sentence[1] == Tid.nutid:
             test_Xs.append(vectors[i])
@@ -94,7 +85,6 @@ if TEST:
     print("> done")
     print("best parameters:")
     print(clf.best_params_)
-
 
     print("estimating accuracy ...")
 

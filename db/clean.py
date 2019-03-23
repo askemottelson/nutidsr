@@ -1,5 +1,5 @@
 from db.db_handler import db
-from db.models import Word, Form
+from db.models import Word
 
 
 words = db.query(Word).all()
