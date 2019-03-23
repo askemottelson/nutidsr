@@ -11,3 +11,9 @@ It does pos-tagging (dictionary and rule order based), and tense classification 
 The library relies on two data sets:
 * the complete Danish ortography (scraped from dsn.dk; scraper included in lib)
 * an annotated data set of tenses of sentences (nutidsr/data.py).
+
+# train models
+`python3 -m nutidsr.presence`
+
+# run application
+`python3 -m nutidsr.app`
