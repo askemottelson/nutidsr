@@ -9,7 +9,7 @@ It does pos-tagging (dictionary and rule order based), and tense classification 
 
 # data
 The library relies on two data sets:
-* the complete Danish ortography (scraped from dsn.dk; scraper included in lib)
+* the complete Danish orthography (scraped from dsn.dk; scraper included in lib; data in SQLite (`db/app.db`).
 * an annotated data set of tenses of sentences (nutidsr/data.py).
 
 # train models
