@@ -1,0 +1,4 @@
+bs4
+requests
+sqlalchemy
+sqlalchemy_utils
